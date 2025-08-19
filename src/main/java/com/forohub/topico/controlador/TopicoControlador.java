@@ -38,7 +38,7 @@ public class TopicoControlador {
         }
 
         // Buscar al autor por email para obtener el objeto Usuario completo
-        Optional<Usuario> autorOptional = Optional.ofNullable(usuarioRepository.findByEmail(datosRegistroTopico.autor()));
+        Optional<Usuario> autorOptional = Optional.ofNullable((Usuario) usuarioRepository.findByEmail(datosRegistroTopico.autor()));
         if (autorOptional.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }

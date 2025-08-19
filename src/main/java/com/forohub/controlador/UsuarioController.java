@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -19,10 +20,15 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     @Transactional
     public ResponseEntity<Void> registrarUsuario(@RequestBody @Valid DatosRegistroUsuario datosRegistroUsuario) {
-        usuarioRepository.save(new Usuario(datosRegistroUsuario));
+        var usuario = new Usuario(datosRegistroUsuario);
+        usuario.setClave(passwordEncoder.encode(datosRegistroUsuario.clave()));
+        usuarioRepository.save(usuario);
         return ResponseEntity.ok().build();
     }
 }
